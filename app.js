@@ -1,9 +1,9 @@
-const progressBar = document.querySelector(".prgress-bar"),
+const progressBar = document.querySelector(".progress-bar"),
     progressText = document.querySelector(".progress-text");
 
 const progress = (value) => {
     const percentage = (value / time) * 100;
-    progressBar.computedStyleMap.width = `${percentage}%`;
+    progressBar.style.width = `${percentage}%`;
     progressText.innerHTML = `${value}`;
 
 }
@@ -73,16 +73,35 @@ const showQuestion = (question) => {
         Question <span class="current">${questions.indexOf(question) + 1}</span>
         <span class="total"> / ${questions.length}
     `;
-    const answerDiv = document.querySelectorAll(".answer");
-    answerDiv.forEach((answer) => {
-        if (!answer.classList.contains("checked")) {
-            answerDiv.forEach((answer) => {
-                answer.classList.remove("selected");
-            });
+    const answersDiv = document.querySelectorAll(".answer");
 
-            answer.classList.add("selected");
+    answersDiv.forEach((answer) => {
+        answer.addEventListener("click", () => {
+            if (!answer.classList.contains("checked")) {
+                answersDiv.forEach((answer) => {
+                    answer.classList.remove("selected");
+                });
+                answer.classList.add("selected");
+                submitBtn.disabled = false;
+            }
+        });
+    });
+    time = timePerQuestion.value;
+    startTimer(time);
+};
 
-            submitBtn.disabled = false;
+const startTimer = (time) => {
+    timer = setInterval(() => {
+        if (timer > 0) {
+
+            progress(time);
+            time--;
         }
-    })
+    }, 1000)
+}
+
+submitBtn.addEventListener("click",checkAnswer);
+
+const checkAnswer = () => {
+    clearInterval(timer)
 }
